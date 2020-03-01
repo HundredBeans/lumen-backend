@@ -102,7 +102,7 @@ and copy the obtined token
     "quantity": "13"
 }
 ```
-#### You can add more CD to populate the CD list
+You can add more CD to populate the CD list
 #### Register User
 `POST: /register` with PARAMETERS: 
 ```
@@ -131,4 +131,4 @@ and copy the obtined token
 `POST: /user/rent` paste the token into `Authorization with type: Bearer Token`
 #### Return the CD with rent ID 1
 `POST: /user/return/1` paste the token into `Authorization with type: Bearer Token`
-#### You can try with more admin route such as see the rented CD, delete CD, see the returned CD, and more.
+You can try with more admin route such as see the rented CD, delete CD, see the returned CD, and more.
