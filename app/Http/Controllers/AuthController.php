@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\AdminToken;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\User;
@@ -50,6 +51,33 @@ class AuthController extends Controller
         $username = $request -> input('username');
         $password = $request -> input('password');
 
+        // Admin Login
+        if ($username == 'admin' && $password == 'admin123') {
+            $newToken = $this -> generateToken();
+
+            $adminToken = AdminToken::all();
+            if (count($adminToken) < 1){
+                $newAdminToken = new AdminToken();
+                $newAdminToken->token = $newToken;
+                $newAdminToken->save();
+
+                return response()->json([
+                    'success'=>true,
+                    'message'=>'Logged in as admin success',
+                    'token'=>$newToken
+                ], 200);
+            }else{
+                $adminToken = $adminToken->first();
+                $adminToken->token = $newToken;
+                $adminToken->save();
+
+                return response()->json([
+                    'success'=>true,
+                    'message'=>'Logged in as admin success',
+                    'token'=>$newToken
+                ], 200);
+            }
+        }
         $user = User::where('username', $username)->first();
 
         if (Hash::check($password, $user->password)){

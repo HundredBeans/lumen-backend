@@ -13,7 +13,8 @@ class AdminController extends Controller
      */
     public function __construct()
     {
-        //
+        // Middleware Auth for admin
+        $this->middleware("admin");
     }
     // Insert new CD
     public function insertCd (Request $request){
