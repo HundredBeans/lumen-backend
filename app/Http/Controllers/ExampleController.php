@@ -13,6 +13,9 @@ class ExampleController extends Controller
     {
         //
     }
-
+    public function generateKey() 
+    {
+        return str_random(32);
+    }
     //
 }
