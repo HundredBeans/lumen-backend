@@ -21,8 +21,8 @@ $router->get('/key', 'ExampleController@generateKey');
 $router->post('/add', 'AdminController@insertCd');
 $router->put('/cd/{id}', 'AdminController@editCd');
 $router->delete('/cd/{id}', 'AdminController@deleteCd');
-$router->get('/rent', 'AdminController@getListRent');
-$router->get('/user', 'AdminController@getListUser');
+$router->get('/rent/returned', 'AdminController@getListRentReturned');
+$router->get('/rent/notreturned', 'AdminController@getListRentNotReturned');
 
 // User
 $router->get('/cd', 'UserController@getListCd');

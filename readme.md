@@ -1,21 +1,46 @@
-# Lumen PHP Framework
+# REST API for CD Rental with LUMEN 5.5
+&copy; 2020 Mohammad Daffa
+> This repository was specially made for Jojonomic Backend Engineer Test
 
-[![Build Status](https://travis-ci.org/laravel/lumen-framework.svg)](https://travis-ci.org/laravel/lumen-framework)
-[![Total Downloads](https://poser.pugx.org/laravel/lumen-framework/d/total.svg)](https://packagist.org/packages/laravel/lumen-framework)
-[![Latest Stable Version](https://poser.pugx.org/laravel/lumen-framework/v/stable.svg)](https://packagist.org/packages/laravel/lumen-framework)
-[![Latest Unstable Version](https://poser.pugx.org/laravel/lumen-framework/v/unstable.svg)](https://packagist.org/packages/laravel/lumen-framework)
-[![License](https://poser.pugx.org/laravel/lumen-framework/license.svg)](https://packagist.org/packages/laravel/lumen-framework)
+## Features
+* Admin Authorization for Adding new CD or Edit existing CD
+* User Login and Register
+* User Authorization to Access all the User's Feature :
+  - User can see all the CD that can be rented
+  - User can rent a CD
+  - User can see what they rent
+  - User can return a CD
+  - User will know the rent price when returning the CD
 
-Laravel Lumen is a stunningly fast PHP micro-framework for building web applications with expressive, elegant syntax. We believe development must be an enjoyable, creative experience to be truly fulfilling. Lumen attempts to take the pain out of development by easing common tasks used in the majority of web projects, such as routing, database abstraction, queueing, and caching.
+## API Routes
+* **Admin Routes**
+  1. **Add new CD**
+     - `METHOD: POST` `PATH: /add` `PARAM: title, rate, category, quantity` `HEADER: Auth-Bearer Token`
+  2. **Edit existing CD**
+     - `METHOD: PUT` `PATH: /cd/{id}` `PARAM: title, rate, category, quantity` `HEADER: Auth-Bearer Token`
+  3. **Delete existing CD**
+     - `METHOD: DELETE` `PATH: /cd/{id}` `PARAM: - ` `HEADER: Auth-Bearer Token`
+  4. **Show list returned Rent**
+     - `METHOD: GET` `PATH: /rent/returned` `PARAM: - ` `HEADER: Auth-Bearer Token`
+  5. **Show list not yet returned Rent**
+     - `METHOD: GET` `PATH: /rent/notreturned` `PARAM: - ` `HEADER: Auth-Bearer Token`
+* **User Routes**
+  1. **Get list CD**
+     - `METHOD: GET` `PATH: /cd` `PARAM: - ` `HEADER: Auth-Bearer Token`
+  2. **Get specific CD by ID**
+     - `METHOD: GET` `PATH: /cd/{id}` `PARAM: - ` `HEADER: Auth-Bearer Token`
+  3. **Rent a CD**
+     - `METHOD: POST` `PATH: /cd/{id}/rent` `PARAM: - ` `HEADER: Auth-Bearer Token`
+  4. **Check User's rent list**
+     - `METHOD: GET` `PATH: /user/rent` `PARAM: - ` `HEADER: Auth-Bearer Token`
+  5. **Check User's specific rent**
+     - `METHOD: GET` `PATH: /user/rent/{id}` `PARAM: - ` `HEADER: Auth-Bearer Token`
+  6. **Return rented CD**
+     - `METHOD: POST` `PATH: /user/return/{id}` `PARAM: - ` `HEADER: Auth-Bearer Token`
+* **Auth Routes**
+  1. **Register**
+     - `METHOD: POST` `PATH: /register` `PARAM: name, username, password` `HEADER: - `
+  1. **Login**
+     - `METHOD: POST` `PATH: /login` `PARAM: username, password` `HEADER: - `
 
-## Official Documentation
-
-Documentation for the framework can be found on the [Lumen website](http://lumen.laravel.com/docs).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Lumen, please send an e-mail to Taylor Otwell at taylor@laravel.com. All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Lumen framework is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT)
+## How To
