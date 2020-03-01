@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 use App\ModelCd;
+use App\User;
+use App\ModelRent;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
@@ -26,6 +28,69 @@ class UserController extends Controller
         $data = ModelCd::where('id', $id)->first();
         return response($data);
     }
-    
+    // Rent specific CD
+    public function rentCd($id, Request $request){
+        // Find user
+        $token = explode(" ", $request->header('Authorization'));
+        $user =  User::where('token', $token[1])->first();
+        $userID = $user->id;
+        // Find cd
+        $cd = ModelCd::where('id', $id)->first();
+        $cdID = $cd->id;
+        // Reduce cd quantity by 1
+        if ($cd->quantity > 0) {
+            $cd->quantity -= 1;
+            $cd->save();
+        }else{
+            return response()->json([
+                'success' => false,
+                'message' => 'CD is out of stock',
+                'data' => ''
+            ], 400);
+        }
+        // Make new rent
+        $rent = new ModelRent();
+        $rent->user_id = $userID;
+        $rent->cd_id = $cdID;
+        $rent->returned = false;
+        $rent->save();
 
+        return response()->json([
+            'success' => true,
+            'message' => 'rent success',
+            'data' => [
+                'rent_detail' => $rent,
+                'cd_detail' => [
+                    'title' => $cd->title,
+                    'rate' => $cd->rate,
+                    'category' => $cd->category,
+                ],
+            ]
+        ], 200);
+
+    }
+    // Check List User's Rented CD
+    public function checkListUserRent(Request $request) {
+        // Find user
+        $token = explode(" ", $request->header('Authorization'));
+        $user =  User::where('token', $token[1])->first();
+        $userID = $user->id;
+        // Find User's Rent
+        $rent = ModelRent::where('user_id', $userID)->get();
+        $cd_details = array();
+        foreach ($rent as $value) {
+            if ($value['returned']==false){
+                $cdID = $value['cd_id'];
+                $cd = ModelCd::where('id', $cdID)->first();
+                $cd_detail = array('title'=>$cd->title, 'rate'=>$cd->rate, 'category'=>$cd->category, 'rent_date'=>$cd->created_at);
+                array_push($cd_details, $cd_detail);
+            }else{
+                continue;
+            }
+        }
+        return response()->json([
+            'total_rent'=>count($rent),
+            'data'=>$cd_details
+        ], 200);
+    }
 }
