@@ -13,6 +13,7 @@ class ExampleController extends Controller
     {
         //
     }
+    // Generate App key
     public function generateKey() 
     {
         return str_random(32);
