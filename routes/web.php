@@ -17,53 +17,21 @@ $router->get('/', function () use ($router) {
 
 // Generate Application Key
 $router->get('/key', 'ExampleController@generateKey');
-// Get all cd
-$router->get('/cd', 'UserController@index');
-// Insert new cd
-$router->post('/cd/add', 'UserController@insertCd');
-// Edit selected cd
-$router->put('/cd/{id}', 'UserController@editCd');
-// Get selected cd
+// Admin 
+$router->post('/add', 'AdminController@insertCd');
+$router->put('/cd/{id}', 'AdminController@editCd');
+$router->delete('/cd/{id}', 'AdminController@deleteCd');
+$router->get('/rent', 'AdminController@getListRent');
+$router->get('/user', 'AdminController@getListUser');
+
+// User
+$router->get('/cd', 'UserController@getListCd');
 $router->get('/cd/{id}', 'UserController@getCd');
-// Search
-$router->get('/search', 'UserController@searchCd');
+$router->post('/cd/{id}/rent', 'UserController@rentCd');
+$router->get('/user/rent', 'UserController@checkListUserRent');
+$router->get('/user/rent/{id}', 'UserController@checkUserRent');
+$router->post('/user/return/{id}', 'UserController@returnUserRent');
 
-$router->get('/foo', function() {
-    return 'Hello, GET method!';
-});
-
-$router->get('/user/{id}', function($id) {
-    return 'User ID ='.$id;
-});
-
-$router->get('/optional[/{param}]', function($param = null) {
-    return 'Optional = '.$param;
-});
-
-// Redirect
-$router->get('profile/redirect', ['as' => 'route.profile', function() {
-    return 'Route Profile';
-}]);
-
-$router->get('redirect', function() {
-    return redirect()->route('route.profile');
-});
-
-$router->get('fail', function() {
-    return 'FAIL NOT ENOUGH AGE LOLLL';
-});
-
-// Route Group
-$router->group(['prefix' => 'admin', 'middleware' => 'age'], function() use ($router) {
-    $router->get('home', function() {
-        return 'Home Admin';
-    });
-
-    $router->get('login', function() {
-        return 'Admin Login';
-    });
-
-    $router->get('', function() {
-        return 'Admin Page';
-    });
-});
+// Auth
+$router->post('/register', 'AuthController@register');
+$router->post('/login', 'AuthController@login');

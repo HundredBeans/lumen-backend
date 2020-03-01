@@ -13,54 +13,19 @@ class UserController extends Controller
      */
     public function __construct()
     {
-        //
+        // Middleware Auth for User
+        $this->middleware("login");
     }
-    public function index(Request $request){
+    // Get CD List
+    public function getListCd(Request $request){
         $data = ModelCd::all();
         return response($data);
     }
-    public function insertCd (Request $request){
-        $data = new ModelCd();
-        $data->title = $request->input('title');
-        $data->rate = $request->input('rate');
-        $data->category = $request->input('category');
-        $data->quantity = $request->input('quantity');
-        $data->save();
-    
-        return response($data);
-    }
-    public function editCd ($id, Request $request){
-        $data = ModelCd::where('id',$id)->first();
-        if (null !== ($request->input('title'))) {
-            $data->title = $request->input('title');
-        }
-        if (null !== ($request->input('rate'))) {
-            $data->rate = $request->input('rate');
-        }
-        if (null !== ($request->input('category'))) {
-            $data->category = $request->input('category');
-        }
-        if (null !== ($request->input('quantity'))) {
-            $data->quantity = $request->input('quantity');
-        }
-        $data->save();
-    
-        return response($data);
-    }
+    // Get specific CD
     public function getCd ($id) {
         $data = ModelCd::where('id', $id)->first();
         return response($data);
     }
-    public function searchCd(Request $request){
-        $data = ModelCd::all();
-        if (null !== ($request->has('title'))){
-            $search = $request->title;
-            $data = $data->where('title', 'like', $search)->all();
-        }
-        if (null !== ($request->has('category'))){
-            $search = $request->category;
-            $data = $data->where('category', 'like', $search)->all();
-        }
-        return response($data);
-    }
+    
+
 }
