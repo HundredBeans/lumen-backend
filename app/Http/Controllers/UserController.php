@@ -22,11 +22,22 @@ class UserController extends Controller
     // Get CD List
     public function getListCd(Request $request){
         $data = ModelCd::all();
-        return response($data);
+        $filteredData = array();
+        foreach ($data as $value){
+            if ($value['quantity'] < 1){
+                continue;
+            }else{
+                array_push($filteredData, $value);
+            }
+        }
+        return response($filteredData);
     }
     // Get specific CD
     public function getCd ($id) {
         $data = ModelCd::where('id', $id)->first();
+        if ($data->quantity < 1) {
+            return response('CD not found', 404);
+        }
         return response($data);
     }
     // Rent specific CD

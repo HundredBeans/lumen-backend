@@ -43,4 +43,92 @@
   1. **Login**
      - `METHOD: POST` `PATH: /login` `PARAM: username, password` `HEADER: - `
 
-## How To
+## How To Run the App
+First, clone the repo:
+```bash
+$ git clone https://github.com/daffa99/lumen-backend.git
+```
+#### Install dependencies
+```
+$ cd lumen-backend
+$ composer install
+```
+#### Configure the Environment
+Create `.env` file:
+```
+$ cat .env.example > .env
+```
+You can also adjust the database variables
+#### Create the databases
+```bash
+mysql> CREATE DATABASE jojonomic;
+```
+Test database:
+```bash
+mysql> CREATE DATABASE jojonomic_test;
+```
+#### Run the Artisan migrate command
+```bash
+$ php artisan migrate
+```
+#### Run the App
+```bash
+$ php -S localhost:8000 -t public
+```
+## Recommended API Route Step
+#### Login Admin
+`POST: /login` with PARAMETERS: 
+```
+{
+	"username":"admin",
+	"password":"admin123"
+}
+``` 
+and copy the obtined token
+#### Add new CD
+`POST: /add` paste the token into `Authorization with type: Bearer Token`, and input PARAMETERS: 
+```
+{
+    "title": "Parasite",
+    "rate": "3000",
+    "category": "Thriller",
+    "quantity": "2"
+}
+```
+#### Add more quantity in CD-1
+`PUT: /cd/1` paste the token into `Authorization with type: Bearer Token`, and input PARAMETERS:
+```
+{
+    "quantity": "13"
+}
+```
+#### You can add more CD to populate the CD list
+#### Register User
+`POST: /register` with PARAMETERS: 
+```
+{
+	"name":"Jojonomic",
+	"username":"jojonomic",
+	"password":"rahasia"
+}
+``` 
+#### Login User
+`POST: /login` with PARAMETERS: 
+```
+{
+	"username":"jojonomic",
+	"password":"rahasia"
+}
+``` 
+and copy the obtined token
+#### See CD List
+`GET: /cd` paste the token into `Authorization with type: Bearer Token`
+#### See CD-1
+`GET: /cd/1` paste the token into `Authorization with type: Bearer Token`
+#### Rent CD-1
+`POST: /cd/1/rent` paste the token into `Authorization with type: Bearer Token`
+#### See User's rented CD
+`POST: /user/rent` paste the token into `Authorization with type: Bearer Token`
+#### Return the CD with rent ID 1
+`POST: /user/return/1` paste the token into `Authorization with type: Bearer Token`
+#### You can try with more admin route such as see the rented CD, delete CD, see the returned CD, and more.
