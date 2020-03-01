@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 class UserController extends Controller
 {
     /**
-     * Create a new controller instance.
+     * Create a new controller instance for User Interaction that need Authentication.
      *
      * @return void
      */
@@ -145,6 +145,8 @@ class UserController extends Controller
                 'message'=>'CD is already returned'
             ], 400);
         }
+        // Add cd quantity by 1 and change returned status to true
+        $cd->quantity += 1;
         $rent->returned = true;
         $rent->save();
         // Calculate Rent day

@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 class AdminController extends Controller
 {
     /**
-     * Create a new controller instance.
+     * Create a new controller instance for Admin.
      *
      * @return void
      */

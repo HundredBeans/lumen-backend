@@ -9,7 +9,7 @@ use App\User;
 class AuthController extends Controller
 {
     /**
-     * Create a new controller instance.
+     * Create a new controller instance for Authentication (login and register).
      *
      * @return void
      */
