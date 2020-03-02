@@ -6,19 +6,22 @@ use App\ModelRent;
 use App\User;
 use Illuminate\Http\Request;
 
+/**
+ * Create a new controller instance for Admin.
+ */
 class AdminController extends Controller
 {
     /**
-     * Create a new controller instance for Admin.
-     *
-     * @return void
+     * Add middleware Authentication for Admin using admin_token
      */
     public function __construct()
     {
         // Middleware Auth for admin
         $this->middleware("admin");
     }
-    // Insert new CD
+    /**
+     * Insert new CD by Admin
+     */
     public function insertCd (Request $request){
         $data = new ModelCd();
         $data->title = $request->input('title');
@@ -33,7 +36,9 @@ class AdminController extends Controller
             'data'=>$data
         ], 201);
     }
-    // Edit existing CD
+    /**
+     * Edit CD by Admin with parameter CD_ID
+     */
     public function editCd ($id, Request $request){
         $data = ModelCd::where('id',$id)->first();
         if (null !== ($request->input('title'))) {
@@ -56,17 +61,22 @@ class AdminController extends Controller
             'data' => $data
         ], 201);
     }
-    // Delete Existing CD
-    public function deleteCd ($id, Request $request){
+    /**
+     * Soft Delete Existing CD by change its quantity to 0
+     */
+    public function deleteCd ($id){
         $data = ModelCd::where('id',$id)->first();
-        $data->delete();
+        $data->quantity = 0;
+        $data->save();
     
         return response()->json([
             'success' => true,
             'message' => 'Delete CD success'
-        ]);
+        ], 200);
     }
-    // Show list returned rent
+    /**
+     * Show list of returned CD
+     */
     public function getListRentReturned(){
         $rentList = ModelRent::all();
         $rentDetails = array();
@@ -95,7 +105,9 @@ class AdminController extends Controller
             'detail' => $rentDetails
         ], 200); 
     }
-    // Show list rent not yet returned
+    /**
+     * Show list of not yet returned CD
+     */
     public function getListRentNotReturned(){
         $rentList = ModelRent::all();
         $rentDetails = array();

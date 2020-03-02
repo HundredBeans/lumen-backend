@@ -5,16 +5,16 @@ use Laravel\Lumen\Testing\DatabaseTransactions;
 use Laravel\Lumen\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Artisan;
 
+/**
+ * This test was used to Test the API. The way i approach this test was to make it step by step, so it can populate the database while doing testing (because i didnt use seed). After testing, i include the reset function from TestCase to reset the database so it is ready to do another test immidiately
+ *
+ * 
+ */
 class ApiRouteTest extends TestCase
 {
-    // use DatabaseMigrations;
-    // use DatabaseTransactions;
     /**
-     * A basic test example.
-     *
-     * @return void
+     * Test login admin
      */
-    // Test login admin
     public function testLoginAdmin()
     {
         $data = array(
@@ -29,7 +29,9 @@ class ApiRouteTest extends TestCase
             'message' => 'Logged in as admin success',
         ]);
     }
-    // Get Token Admin
+    /**
+     * Generate token for admin authentication to be used for next test
+     */
     public function getTokenAdmin(){
         $loginData = array(
             "username"=>"admin",
@@ -40,7 +42,9 @@ class ApiRouteTest extends TestCase
         $response = json_decode($json);
         return $response->token;
     }
-    // Test Admin add new CD
+    /**
+     * Test add new CD for Admin
+     */
     public function testAddNewCd(){
         $data = array(
             "title"=>"Judul Film",
@@ -59,7 +63,9 @@ class ApiRouteTest extends TestCase
             'message' => 'Add new CD success',
         ]);
     }
-    // Test Admin add quantity CD
+    /**
+     * Test Edit CD for Admin
+     */
     public function testEditCd(){
         $data = array(
             "quantity"=>99
@@ -75,7 +81,9 @@ class ApiRouteTest extends TestCase
             'message' => 'Edit existing CD success',
         ]);
     }
-    // Test register new user
+    /**
+     * Test register new user
+     */
     public function testRegisterUser()
     {
         // Register User
@@ -92,7 +100,9 @@ class ApiRouteTest extends TestCase
             'message' => 'Register Success',
         ]);
     }
-    // Test login User
+    /**
+     * Test login user
+     */
     public function testLoginUser(){
         $loginData = array(
             "username"=>"testdata",
@@ -108,7 +118,9 @@ class ApiRouteTest extends TestCase
         ]);
 
     }
-    // Get token user
+    /**
+     * Function to generate token for User to be used in the next test
+     */
     public function getTokenUser(){
         $loginData = array(
             "username"=>"testdata",
@@ -118,7 +130,9 @@ class ApiRouteTest extends TestCase
         $response = json_decode($json);
         return $response->token;
     }
-    // User see CD List
+    /**
+     * Test get cd list for User
+     */
     public function testGetCdList(){
         $token = $this -> getTokenUser();
         $headers = array(
@@ -127,7 +141,9 @@ class ApiRouteTest extends TestCase
         $this->get('/cd', $headers);
         $this->assertResponseStatus(200);
     }
-    // User see Specific CD
+    /**
+     * Test get specific CD by ID for user
+     */
     public function testGetCdByID(){
         $token = $this -> getTokenUser();
         $headers = array(
@@ -136,7 +152,9 @@ class ApiRouteTest extends TestCase
         $this->get('cd/1', $headers);
         $this->assertResponseStatus(200);
     }
-    // User rent a CD
+    /**
+     * Test rent a CD by ID for User
+     */
     public function testRentCd(){
         $token = $this -> getTokenUser();
         $headers = array(
@@ -150,7 +168,9 @@ class ApiRouteTest extends TestCase
             'borrower' => "Test Data",
         ]);
     }
-    // User see their rented CD
+    /**
+     * Test see rented CD for User
+     */
     public function testSeeRentCd(){
         $token = $this -> getTokenUser();
         $headers = array(
@@ -163,7 +183,9 @@ class ApiRouteTest extends TestCase
             'total_rent'=>1,
         ]);
     }
-    // User return their rented CD
+    /**
+     * Test return CD for User
+     */
     public function testReturnRentCd(){
         $token = $this -> getTokenUser();
         $headers = array(
@@ -176,6 +198,52 @@ class ApiRouteTest extends TestCase
             'message'=>'Return CD success',
             'borrower' => 'Test Data',
             ]);
+    }
+    /**
+     * Test Admin delete CD by ID
+     */
+    public function testDeleteCdAdmin(){
+        $token = $this->getTokenAdmin();
+        $headers = array(
+            "Authorization"=>"Bearer $token"
+        );
+
+        $this->delete('cd/1', [], $headers);
+        $this->assertResponseStatus(200);
+        $this->seeJsonContains([
+            'success' => true,
+            'message' => 'Delete CD success'
+            ]);
+    }
+    /**
+     * Test Admin get list of Returned CD
+     */
+    public function testGetReturnedCdAdmin(){
+        $token = $this->getTokenAdmin();
+        $headers = array(
+            "Authorization"=>"Bearer $token"
+        );
+        $this->get('/rent/returned', $headers);
+        $this->assertResponseStatus(200);
+        $this->seeJsonContains([
+            'total_rent' => 1,
+        ]);
+        // To Reset database after all test
+        $this->reset();
+    }
+    /**
+     * Test Admin get list of Returned CD
+     */
+    public function testGetNotReturnedCdAdmin(){
+        $token = $this->getTokenAdmin();
+        $headers = array(
+            "Authorization"=>"Bearer $token"
+        );
+        $this->get('/rent/notreturned', $headers);
+        $this->assertResponseStatus(200);
+        $this->seeJsonContains([
+            'total_rent' => 0,
+        ]);
         // To Reset database after all test
         $this->reset();
     }
