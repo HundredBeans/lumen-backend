@@ -128,7 +128,7 @@ and copy the obtined token
 #### Rent CD-1
 `POST: /cd/1/rent` paste the token into `Authorization with type: Bearer Token`
 #### See User's rented CD
-`POST: /user/rent` paste the token into `Authorization with type: Bearer Token`
+`GET: /user/rent` paste the token into `Authorization with type: Bearer Token`
 #### Return the CD with rent ID 1
 `POST: /user/return/1` paste the token into `Authorization with type: Bearer Token`
 You can try with more admin route such as see the rented CD, delete CD, see the returned CD, and more.
